@@ -129,4 +129,35 @@ public class Util {
 
         return null;
     }
+
+    public static String resolveSystemProperty(String text){
+        while (true){
+            int idx1 = text.indexOf("${");
+            int idx2 = text.indexOf("}");
+
+            if (idx1 == -1)
+                return text;
+
+            String name = text.substring(idx1 +2, idx2);
+            String value= System.getProperty(name);
+
+            if (value != null)
+                text = replaceString(text, "${"+ name +"}", value);
+            else
+                return text.substring(0, idx2 + 1) + resolveSystemProperty(text.substring(idx2 + 1));
+            }
+    }
+
+    private static String replaceString(String s, String pattern, String newPattern){
+        String r = "";
+
+        int i;
+
+        while ((i = s.indexOf(pattern)) != -1){
+            r += s.substring(0, i) + newPattern;
+            s = s.substring(i + pattern.length());
+        }
+
+        return r + s;
+    }
 }

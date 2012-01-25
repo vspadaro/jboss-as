@@ -36,6 +36,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.jboss.as.controller.operations.common.Util;
 import org.jboss.as.jpa.config.PersistenceUnitMetadataHolder;
 import org.jboss.as.jpa.config.PersistenceUnitMetadataImpl;
 import org.jboss.as.jpa.spi.PersistenceUnitMetadata;
@@ -191,15 +192,15 @@ public class PersistenceUnitXmlParser extends MetaDataElementParser {
             }
             switch (element) {
                 case CLASS:
-                    classes.add(reader.getElementText());
+                    classes.add(Util.resolveSystemProperty(reader.getElementText()));
                     break;
 
                 case DESCRIPTION:
-                    final String description = reader.getElementText();
+                    final String description = Util.resolveSystemProperty(reader.getElementText());
                     break;
 
                 case EXCLUDEUNLISTEDCLASSES:
-                    String text = reader.getElementText();
+                    String text = Util.resolveSystemProperty(reader.getElementText());
                     if (text == null || text.isEmpty()) {
                         //the spec has examples where an empty
                         //exclude-unlisted-classes element has the same
@@ -211,20 +212,20 @@ public class PersistenceUnitXmlParser extends MetaDataElementParser {
                     break;
 
                 case JARFILE:
-                    String file = reader.getElementText();
+                    String file = Util.resolveSystemProperty(reader.getElementText());
                     jarfiles.add(file);
                     break;
 
                 case JTADATASOURCE:
-                    pu.setJtaDataSourceName(reader.getElementText());
+                    pu.setJtaDataSourceName(Util.resolveSystemProperty(reader.getElementText()));
                     break;
 
                 case NONJTADATASOURCE:
-                    pu.setNonJtaDataSourceName(reader.getElementText());
+                    pu.setNonJtaDataSourceName(Util.resolveSystemProperty(reader.getElementText()));
                     break;
 
                 case MAPPINGFILE:
-                    mappingFiles.add(reader.getElementText());
+                    mappingFiles.add(Util.resolveSystemProperty(reader.getElementText()));
                     break;
 
                 case PROPERTIES:
@@ -232,16 +233,16 @@ public class PersistenceUnitXmlParser extends MetaDataElementParser {
                     break;
 
                 case PROVIDER:
-                    pu.setPersistenceProviderClassName(reader.getElementText());
+                    pu.setPersistenceProviderClassName(Util.resolveSystemProperty(reader.getElementText()));
                     break;
 
                 case SHAREDCACHEMODE:
-                    String cm = reader.getElementText();
+                    String cm = Util.resolveSystemProperty(reader.getElementText());
                     pu.setSharedCacheMode(SharedCacheMode.valueOf(cm));
                     break;
 
                 case VALIDATIONMODE:
-                    String validationMode = reader.getElementText();
+                    String validationMode = Util.resolveSystemProperty(reader.getElementText());
                     pu.setValidationMode(ValidationMode.valueOf(validationMode));
                     break;
 

@@ -34,6 +34,7 @@ import org.apache.catalina.connector.Connector;
 import org.apache.coyote.ajp.AjpAprProtocol;
 import org.apache.coyote.http11.Http11AprProtocol;
 import org.apache.coyote.http11.Http11Protocol;
+import org.jboss.as.controller.operations.common.Util;
 import org.jboss.as.network.ManagedBinding;
 import org.jboss.as.network.SocketBinding;
 import org.jboss.dmr.ModelNode;
@@ -158,23 +159,23 @@ class WebConnectorService implements Service<Connector> {
                     try {
                         if (ssl.hasDefined(Constants.PASSWORD)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLPassword", String.class);
-                            m.invoke(connector.getProtocolHandler(), unmaskedPassword);
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(unmaskedPassword));
                         }
                         if (ssl.hasDefined(Constants.CERTIFICATE_KEY_FILE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLCertificateKeyFile", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CERTIFICATE_KEY_FILE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CERTIFICATE_KEY_FILE).asString()));
                         }
                         if (ssl.hasDefined(Constants.CIPHER_SUITE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLCipherSuite", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CIPHER_SUITE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CIPHER_SUITE).asString()));
                         }
                         if (ssl.hasDefined(Constants.PROTOCOL)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLProtocol", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.PROTOCOL).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.PROTOCOL).asString()));
                         }
                         if (ssl.hasDefined(Constants.VERIFY_CLIENT)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLVerifyClient", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.VERIFY_CLIENT).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.VERIFY_CLIENT).asString()));
                         }
                         if (ssl.hasDefined(Constants.VERIFY_DEPTH)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLVerifyDepth", Integer.TYPE);
@@ -182,15 +183,15 @@ class WebConnectorService implements Service<Connector> {
                         }
                         if (ssl.hasDefined(Constants.CERTIFICATE_FILE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLCertificateFile", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CERTIFICATE_FILE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CERTIFICATE_FILE).asString()));
                         }
                         if (ssl.hasDefined(Constants.CA_CERTIFICATE_FILE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLCACertificateFile", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CA_CERTIFICATE_FILE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CA_CERTIFICATE_FILE).asString()));
                         }
                         if (ssl.hasDefined(Constants.CA_REVOCATION_URL)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setSSLCARevocationFile", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CA_REVOCATION_URL).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CA_REVOCATION_URL).asString()));
                         }
                    } catch (NoSuchMethodException e) {
                        throw new StartException(MESSAGES.failedSSLConfiguration(), e);
@@ -200,35 +201,35 @@ class WebConnectorService implements Service<Connector> {
                     try {
                         if (ssl.hasDefined(Constants.KEY_ALIAS)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setKeyAlias", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.KEY_ALIAS).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.KEY_ALIAS).asString()));
                         }
                         if (ssl.hasDefined(Constants.PASSWORD)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setKeypass", String.class);
-                            m.invoke(connector.getProtocolHandler(), unmaskedPassword);
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(unmaskedPassword));
                         }
                         if (ssl.hasDefined(Constants.CERTIFICATE_KEY_FILE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setKeystore", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CERTIFICATE_KEY_FILE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CERTIFICATE_KEY_FILE).asString()));
                         }
                         if (ssl.hasDefined(Constants.CIPHER_SUITE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setCiphers", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.CIPHER_SUITE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.CIPHER_SUITE).asString()));
                         }
                         if (ssl.hasDefined(Constants.PROTOCOL)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setProtocols", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.PROTOCOL).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.PROTOCOL).asString()));
                         }
                         if (ssl.hasDefined(Constants.VERIFY_CLIENT)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setClientauth", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.VERIFY_CLIENT).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.VERIFY_CLIENT).asString()));
                         }
                         if (ssl.hasDefined(Constants.SESSION_CACHE_SIZE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setAttribute", String.class, Object.class);
-                            m.invoke(connector.getProtocolHandler(), "sessionCacheSize", ssl.get(Constants.SESSION_CACHE_SIZE).asString());
+                            m.invoke(connector.getProtocolHandler(), "sessionCacheSize", Util.resolveSystemProperty(ssl.get(Constants.SESSION_CACHE_SIZE).asString()));
                         }
                         if (ssl.hasDefined(Constants.SESSION_TIMEOUT)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setAttribute", String.class, Object.class);
-                            m.invoke(connector.getProtocolHandler(), "sessionCacheTimeout", ssl.get(Constants.SESSION_TIMEOUT).asString());
+                            m.invoke(connector.getProtocolHandler(), "sessionCacheTimeout", Util.resolveSystemProperty(ssl.get(Constants.SESSION_TIMEOUT).asString()));
                         }
                         /* possible attributes that apply to ssl socket factory
                             keystoreType -> PKCS12
@@ -240,24 +241,24 @@ class WebConnectorService implements Service<Connector> {
                          */
                         if (ssl.hasDefined(Constants.CA_CERTIFICATE_FILE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setAttribute", String.class, Object.class);
-                            m.invoke(connector.getProtocolHandler(), "truststoreFile", ssl.get(Constants.CA_CERTIFICATE_FILE).asString());
+                            m.invoke(connector.getProtocolHandler(), "truststoreFile", Util.resolveSystemProperty(ssl.get(Constants.CA_CERTIFICATE_FILE).asString()));
 
                         }
                         if (ssl.hasDefined(Constants.CA_CERTIFICATE_PASSWORD)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setAttribute", String.class, Object.class);
-                            m.invoke(connector.getProtocolHandler(), "truststorePass",ssl.get(Constants.CA_CERTIFICATE_PASSWORD).asString());
+                            m.invoke(connector.getProtocolHandler(), "truststorePass", Util.resolveSystemProperty(ssl.get(Constants.CA_CERTIFICATE_PASSWORD).asString()));
                         }
                         if (ssl.hasDefined(Constants.TRUSTSTORE_TYPE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setAttribute", String.class, Object.class);
-                            m.invoke(connector.getProtocolHandler(), "truststoreType",ssl.get(Constants.TRUSTSTORE_TYPE).asString());
+                            m.invoke(connector.getProtocolHandler(), "truststoreType", Util.resolveSystemProperty(ssl.get(Constants.TRUSTSTORE_TYPE).asString()));
                         }
                         if (ssl.hasDefined(Constants.KEYSTORE_TYPE)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setKeytype", String.class);
-                            m.invoke(connector.getProtocolHandler(), ssl.get(Constants.KEYSTORE_TYPE).asString());
+                            m.invoke(connector.getProtocolHandler(), Util.resolveSystemProperty(ssl.get(Constants.KEYSTORE_TYPE).asString()));
                         }
                         if (ssl.hasDefined(Constants.CA_REVOCATION_URL)) {
                             Method m = connector.getProtocolHandler().getClass().getMethod("setAttribute", String.class, Object.class);
-                            m.invoke(connector.getProtocolHandler(), "crlFile", ssl.get(Constants.CA_REVOCATION_URL).asString());
+                            m.invoke(connector.getProtocolHandler(), "crlFile", Util.resolveSystemProperty(ssl.get(Constants.CA_REVOCATION_URL).asString()));
                         }
 
                     } catch (NoSuchMethodException e) {

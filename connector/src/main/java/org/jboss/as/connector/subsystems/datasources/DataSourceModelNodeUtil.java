@@ -90,6 +90,7 @@ import java.util.Map;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.SimpleAttributeDefinition;
+import org.jboss.as.controller.operations.common.Util;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
 import org.jboss.jca.common.api.metadata.Defaults;
@@ -362,7 +363,7 @@ class DataSourceModelNodeUtil {
 
     private static String getResolvedStringIfSetOrGetDefault(final OperationContext context, final ModelNode dataSourceNode, final SimpleAttributeDefinition key, final String defaultValue) throws OperationFailedException {
         if (dataSourceNode.hasDefined(key.getName())) {
-            return context.resolveExpressions(dataSourceNode.get(key.getName())).asString();
+            return Util.resolveSystemProperty(context.resolveExpressions(dataSourceNode.get(key.getName())).asString());
         } else {
             return defaultValue;
         }
@@ -370,7 +371,7 @@ class DataSourceModelNodeUtil {
 
     private static String getStringIfSetOrGetDefault(final ModelNode dataSourceNode, final SimpleAttributeDefinition key, final String defaultValue) {
         if (dataSourceNode.hasDefined(key.getName())) {
-            String returnValue = dataSourceNode.get(key.getName()).asString();
+            String returnValue = Util.resolveSystemProperty(dataSourceNode.get(key.getName()).asString());
             return (returnValue != null && returnValue.trim().length() != 0) ? returnValue : null;
         } else {
             return defaultValue;
